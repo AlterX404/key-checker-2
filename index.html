@@ -1,113 +1,100 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Redirecting...</title>
+    <title>Key Generator</title>
     <style>
-        /* CSS styles for the loading bar, buttons, and text */
+        /* CSS styles for the button, key display, and text */
         body {
             background-color: black;
-            color: white;
-        }
-
-        .loading-text {
-            text-align: center;
-            margin-top: 20px;
-            font-size: 24px;
             color: red;
         }
-
-        .progress-bar {
-            width: 100%;
-            height: 30px;
-            background-color: #f2f2f2;
-            margin-top: 20px;
-        }
-
-        .progress-bar-fill {
-            height: 100%;
-            background-color: #FF0000;
-            width: 0%;
-        }
-
-        .button-container {
-            margin-top: 20px;
+        .container {
             text-align: center;
+            margin-top: 100px;
         }
-
-        .continue-button,
-        .subscribe-button {
+        .key-button {
             padding: 10px 20px;
             font-size: 18px;
             cursor: pointer;
-            color: white;
-            border: none;
-            transition: background-color 0.5s ease;
         }
-
-        .continue-button {
-            background-color: #FF0000;
+        .key-display {
+            margin-top: 20px;
+            font-size: 20px;
+            font-weight: bold;
         }
-
-        .subscribe-button {
-            background-color: #FF0000;
-            animation: rainbow 3s infinite;
+        .text {
+            font-size: 32px;
+            font-weight: bold;
         }
-
+        .warning-text {
+            font-size: 24px;
+            color: red;
+            margin-top: 20px;
+        }
+        .rainbow-button {
+            padding: 10px 20px;
+            font-size: 18px;
+            cursor: pointer;
+            animation: rainbow 2s linear infinite;
+        }
         @keyframes rainbow {
-            0% { background-color: red; }
-            14% { background-color: orange; }
-            28% { background-color: yellow; }
-            42% { background-color: green; }
-            57% { background-color: blue; }
-            71% { background-color: indigo; }
-            85% { background-color: violet; }
-            100% { background-color: red; }
+            0% { color: red; }
+            14% { color: orange; }
+            28% { color: yellow; }
+            42% { color: green; }
+            57% { color: blue; }
+            71% { color: indigo; }
+            85% { color: violet; }
+            100% { color: red; }
         }
     </style>
 </head>
 <body>
-    <div class="loading-text">
-        <h1>Key System (2/2) Loading</h1>
-    </div>
-    <div class="progress-bar">
-        <div class="progress-bar-fill"></div>
-    </div>
-    <div class="button-container">
-        <button class="continue-button" onclick="redirectToKeySystem()">Continue to Key System 2/2</button>
-    </div>
-    <div class="button-container">
-        <button class="subscribe-button" onclick="subscribeToYouTube()">Subscribe to Alter-X On YouTube</button>
+    <div class="container">
+        <div class="text">Your Key:</div>
+        <div class="key-display" id="keyDisplay"></div>
+        <div class="warning-text" id="warningText">WARNING: Don't try to bypass the key system!</div>
+        <a href="https://www.youtube.com/channel/UCBTkrkGEibTUayqVvs8G5fg" class="rainbow-button">Subscribe to Alter-X On YouTube</a>
     </div>
 
     <script>
-        // JavaScript code for redirecting and showing the buttons
-        var progressBarFill = document.querySelector('.progress-bar-fill');
-        var buttonContainer = document.querySelector('.button-container');
+        // JavaScript code for generating the key
+        function generateKey() {
+            var key = localStorage.getItem("generatedKey"); // Check if a key is already stored in localStorage
 
-        function redirectToKeySystem() {
-            window.location.href = 'https://link-center.net/447323/alter-hub-key-system-2';
-        }
+            if (key) {
+                document.getElementById("keyDisplay").innerText = key; // Set the stored key in the key display element
+            } else {
+                var currentDate = new Date().toISOString().slice(0, 10); // Get the current date in the format "YYYY-MM-DD"
+                var randomString = ""; // Initialize an empty string to store the random characters
 
-        function subscribeToYouTube() {
-            window.location.href = 'https://www.youtube.com/channel/UCBTkrkGEibTUayqVvs8G5fg';
-        }
-
-        function animateProgressBar() {
-            var width = 0;
-            var intervalId = setInterval(frame, 10);
-
-            function frame() {
-                if (width >= 100) {
-                    clearInterval(intervalId);
-                    buttonContainer.style.display = 'block';
-                } else {
-                    width++;
-                    progressBarFill.style.width = width + '%';
+                // Generate a random string of characters
+                for (var i = 0; i < 10; i++) { // Generate a 10-character long random string
+                    var randomChar = String.fromCharCode(Math.floor(Math.random() * 26) + 97); // Generate a random lowercase letter
+                    randomString += randomChar; // Append the random character to the string
                 }
+
+                key = currentDate + "-" + randomString; // Concatenate the date and random string to form the key
+                localStorage.setItem("generatedKey", key); // Store the generated key in localStorage
+                document.getElementById("keyDisplay").innerText = key; // Set the generated key in the key display element
             }
         }
 
-        setTimeout(animateProgressBar, 1000);
+        // Check if the user has visited the specific URL to gain access
+        var expectedURL = "https://alterx404.github.io/key-checker-2/";
+        var hasVisited = localStorage.getItem("hasVisited");
+
+        if (document.referrer === expectedURL || hasVisited) {
+            document.getElementById("keyDisplay").style.display = "block"; // Show the key display element
+            document.getElementById("warningText").style.display = "none"; // Hide the warning text
+            document.getElementById("generateButton").style.display = "block"; // Show the "Generate Key" button
+        } else {
+            document.getElementById("keyDisplay").style.display = "none"; // Hide the key display element
+            document.getElementById("warningText").style.display = "block"; // Show the warning text
+        }
+
+        // Set the flag to indicate that the user has visited the page
+        localStorage.setItem("hasVisited", true);
     </script>
 </body>
 </html>
